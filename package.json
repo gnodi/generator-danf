@@ -1,0 +1,42 @@
+{
+    "name": "generator-danf",
+    "version": "0.0.0",
+    "description": "A Danf generator for Yeoman",
+    "author": {
+        "name": "Thomas Prelot",
+        "email": "tprelot@gmail.com",
+        "url": "https://github.com/Gnucki"
+    },
+    "contributors": [
+        {
+            "name": "Thomas Prelot",
+            "email": "tprelot@gmail.com",
+            "url": "https://github.com/Gnucki"
+        }
+    ],
+    "files": [
+        "generators"
+    ],
+    "keywords": [
+        "yeoman-generator",
+        "danf",
+        "application"
+    ],
+    "dependencies": {
+        "yeoman-generator": "^0.19.0",
+        "chalk": "~1.1",
+        "yosay": "^1.0.2"
+    },
+    "devDependencies": {
+        "mocha": "~2.2"
+    },
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "generator-danf"
+    },
+    "main": "app/index.js",
+    "scripts": {
+        "test": "mocha"
+    }
+}

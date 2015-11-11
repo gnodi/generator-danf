@@ -1,0 +1,1 @@
+requirejs.config({"map":{"*":{"_app":"app-config-generated-entry.js"}},"out":"/home/gnucki/Workspace/perso/gnucki-danf/test/functional/proto/app/.bin/config.js"});

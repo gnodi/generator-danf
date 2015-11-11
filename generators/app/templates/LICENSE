@@ -1,39 +1,8 @@
-generator-danf
-==============
-
-[![Build Status][travis-image]][travis-url]
-
-This is a [Danf](https://github.com/gnodi/danf) application generator for [Yeoman](http://yeoman.io).
-
-Getting Started
----------------
-
-First, install yo:
-
-```bash
-npm install -g yo
-```
-
-Then, install the danf application generator:
-
-```bash
-npm install -g generator-danf
-```
-
-Finally, initiate the generator:
-
-```bash
-yo danf
-```
-
-License
--------
-
 Open Source Initiative OSI - The MIT License
 
 http://www.opensource.org/licenses/mit-license.php
 
-Copyright (c) 2015 Thomas Prelot
+Copyright (c) <%= date.year %> <%= author.name %>
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -53,6 +22,3 @@ NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
 LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-[travis-image]: https://img.shields.io/travis/gnodi/generator-danf.svg?style=flat
-[travis-url]: https://travis-ci.org/gnodi/generator-danf
