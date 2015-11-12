@@ -9,24 +9,48 @@ module.exports = yeoman.generators.Base.extend({
 
         // Have Yeoman greet the user.
         this.log(yosay(
-            'Welcome to the shining ' + chalk.red('Danf') + ' generator!'
+            'Did I say 42? I wanted to say ' + chalk.blue.bold('Danf') + '! I don\'t remember the question...'
         ));
+
+        this.log('All the following questions will help you to configure a new danf application/module ready to be shared with others.');
+        this.log(chalk.grey("These data will not be used for anything else. You can check the code of this generator at https://github.com/gnodi/generator-danf\r\n"));
 
         var prompts = [
                 {
                     type: 'input',
-                    name: 'author.name',
-                    message: 'Author name?'
-                },
-                {
-                    type: 'input',
                     name: 'app.name',
-                    message: 'App name?'
+                    message: 'The application name',
+                    default: 'test'
                 },
                 {
                     type: 'input',
-                    name: 'repository.name',
-                    message: 'Repository name?'
+                    name: 'app.description',
+                    message: 'The application description',
+                    default: 'This is a danf test application'
+                },
+                {
+                    type: 'input',
+                    name: 'repository.username',
+                    message: 'The github username owning the repository',
+                    default: 'johndorg'
+                },
+                {
+                    type: 'input',
+                    name: 'author.name',
+                    message: 'Your name',
+                    default: 'John Doe'
+                },
+                {
+                    type: 'input',
+                    name: 'author.email',
+                    message: 'Your email',
+                    default: 'john@doe.js'
+                },
+                {
+                    type: 'input',
+                    name: 'author.url',
+                    message: 'The URL of your site or github',
+                    default: 'https://github.js/johndoe'
                 }
             ]
         ;
@@ -36,6 +60,7 @@ module.exports = yeoman.generators.Base.extend({
             function (props) {
                 this.props = {};
 
+                // Decode props.
                 for (var key in props) {
                     var keyParts = key.split('.'),
                         currentProps = this.props
@@ -54,27 +79,42 @@ module.exports = yeoman.generators.Base.extend({
                     }
                 }
 
+                // Build repository name.
+                this.props['repository']['name'] =
+                    'danf-' +
+                    this.props['repository']['username'] +
+                    '-' +
+                    this.props['app']['name']
+                ;
+
+                // Generate a random unique secret.
+                this.props['app']['secret'] = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                    var r = Math.random() * 16 | 0,
+                        v = c == 'x' ? r : (r&0x3 | 0x8)
+                    ;
+
+                    return v.toString(16);
+                });
+
+                // Retrieve the current year.
+                var date = new Date();
+
+                this.props['date'] = {'year': date.getFullYear()};
+
                 done();
             }.bind(this)
         );
     },
 
     writing: {
-        app: function() {
-            this.fs.copy(
-                this.templatePath('_package.json'),
-                this.destinationPath('package.json')
-            );
-        },
-
-        projectfiles: function() {
-            // Handle config.
+        config: function() {
             this.fs.copy(
                 this.templatePath('config'),
                 this.destinationPath('config')
             );
+        },
 
-            // Handle lib.
+        lib: function() {
             this.fs.write(
                 this.destinationPath('lib/client/.gitkeep'),
                 ''
@@ -87,19 +127,21 @@ module.exports = yeoman.generators.Base.extend({
                 this.destinationPath('lib/server/.gitkeep'),
                 ''
             );
+        },
 
-            // Handle resource.
+        resource: function() {
             this.fs.copy(
-                this.templatePath('resource/public/css'),
-                this.destinationPath('resource/public/css')
+                this.templatePath('resource/public'),
+                this.destinationPath('resource/public')
             );
             this.fs.copyTpl(
                 this.templatePath('resource/private/view'),
                 this.destinationPath('resource/private/view'),
                 this.props
             );
+        },
 
-            // Handle test.
+        test: function() {
             this.fs.copy(
                 this.templatePath('test'),
                 this.destinationPath('test')
@@ -112,8 +154,9 @@ module.exports = yeoman.generators.Base.extend({
                 this.destinationPath('test/functional/.gitkeep'),
                 ''
             );
+        },
 
-            // Handle main.
+        project: function() {
             this.fs.copy(
                 this.templatePath('editorconfig'),
                 this.destinationPath('.editorconfig')
@@ -135,6 +178,11 @@ module.exports = yeoman.generators.Base.extend({
                 this.destinationPath('LICENSE'),
                 this.props
             );
+            this.fs.copyTpl(
+                this.templatePath('README.md'),
+                this.destinationPath('README.md'),
+                this.props
+            );
             this.fs.copy(
                 this.templatePath('Makefile'),
                 this.destinationPath('Makefile')
@@ -148,9 +196,10 @@ module.exports = yeoman.generators.Base.extend({
                 this.templatePath('app-dev.js'),
                 this.destinationPath('app-dev.js')
             );
-            this.fs.copy(
+            this.fs.copyTpl(
                 this.templatePath('app-prod.js'),
-                this.destinationPath('app-prod.js')
+                this.destinationPath('app-prod.js'),
+                this.props
             );
             this.fs.copy(
                 this.templatePath('danf-client.js'),
@@ -164,6 +213,41 @@ module.exports = yeoman.generators.Base.extend({
     },
 
     install: function() {
-        this.installDependencies();
+        this.npmInstall();
+    },
+
+    end: function() {
+        this.config.save();
+
+        this.log(chalk.yellow.bold(
+            "\r\n" +
+            'Congratulations, the generation has been successful!'
+        ));
+
+        this.log(chalk.yellow(
+            'The name of your danf application/module is ' +
+            chalk.bold(this.props['repository']['name']) +
+            '. You should certainly name your repository the same.'
+        ));
+
+        this.log(
+            'Execute ' +
+            chalk.bold('node app-prod') +
+            ' to start the server.'
+        );
+        this.log(
+            'Take a look at ' +
+            chalk.bold('http://localhost:3080') +
+            ' now!'
+        );
+
+        this.log(chalk.green(
+            'Have a great time developing with Danf!'
+        ));
+
+        this.log(chalk.grey(
+            'The documentation is available at ' +
+            "https://github.com/gnodi/danf/blob/master/resource/private/doc/index.md\r\n"
+        ));
     }
 });
