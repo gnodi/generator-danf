@@ -2,7 +2,7 @@
 
 var path = require('path'),
     yo = require('yeoman-generator'),
-    os = require('os');
+    os = require('os')
 ;
 
 var assert = yo.assert,
