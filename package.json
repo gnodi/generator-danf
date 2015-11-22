@@ -1,6 +1,6 @@
 {
     "name": "generator-danf",
-    "version": "0.0.0",
+    "version": "0.3.0",
     "description": "A Danf generator for Yeoman",
     "author": {
         "name": "Thomas Prelot",
