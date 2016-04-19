@@ -1,22 +1,6 @@
-logs
-*.log
-
-pids
-*.pid
-*.seed
-
-lib-cov
-
-coverage
-
-.grunt
-
-build/Release
+npm-debug.log
 
 /node_modules
 
-.lock-wscript
-
-/.bin
-
-app-config-generated-entry.js
+.built
+/parameters-*.js

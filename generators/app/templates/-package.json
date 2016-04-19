@@ -15,17 +15,18 @@
         }
     ],
     "dependencies": {
-        "danf": "0.3.*"
+        "danf": "^0.4"
     },
     "devDependencies": {
-        "mocha": "~2.2",
-        "supertest": "~1.0"
+        "mocha": "^2.2",
+        "supertest": "^1.0"
     },
     "keywords": [
         "danf",
         "module",
         "<%= app.name %>"
     ],
+    "license": "MIT",
     "repository": "git://github.com/<%= repository.username %>/<%= repository.name %>",
     "scripts": {
         "test": "make test"

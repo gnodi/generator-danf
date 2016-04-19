@@ -3,7 +3,7 @@ var yeoman = require('yeoman-generator');
 var chalk = require('chalk');
 var yosay = require('yosay');
 
-module.exports = yeoman.generators.Base.extend({
+module.exports = yeoman.Base.extend({
     prompting: function() {
         var done = this.async();
 
@@ -31,7 +31,7 @@ module.exports = yeoman.generators.Base.extend({
                 {
                     type: 'input',
                     name: 'repository.username',
-                    message: 'The github username owning the repository',
+                    message: 'The username owning the repository',
                     default: 'johndorg'
                 },
                 {
@@ -49,8 +49,8 @@ module.exports = yeoman.generators.Base.extend({
                 {
                     type: 'input',
                     name: 'author.url',
-                    message: 'The URL of your site or github',
-                    default: 'https://github.js/johndoe'
+                    message: 'The URL of your personal site or repository provider account',
+                    default: 'https://johndoe.js'
                 }
             ]
         ;
@@ -80,15 +80,22 @@ module.exports = yeoman.generators.Base.extend({
                 }
 
                 // Build repository name.
-                this.props['repository']['name'] =
+                this.props.repository.name =
                     'danf-' +
-                    this.props['repository']['username'] +
+                    this.props.repository.username +
                     '-' +
-                    this.props['app']['name']
+                    this.props.app.name
                 ;
 
+                // Format module name.
+                this.props.module = {};
+                this.props.module.id = this.props.repository.name.replace(/^danf-/, '');
+                this.props.module.name = this.props.module.id.replace(/[-]([^.])/g, function(match, p1) {
+                    return p1.toUpperCase();
+                });
+
                 // Generate a random unique secret.
-                this.props['app']['secret'] = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                this.props.app.secret = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
                     var r = Math.random() * 16 | 0,
                         v = c == 'x' ? r : (r&0x3 | 0x8)
                     ;
@@ -99,7 +106,7 @@ module.exports = yeoman.generators.Base.extend({
                 // Retrieve the current year.
                 var date = new Date();
 
-                this.props['date'] = {'year': date.getFullYear()};
+                this.props.date = {'year': date.getFullYear()};
 
                 done();
             }.bind(this)
@@ -202,12 +209,12 @@ module.exports = yeoman.generators.Base.extend({
                 this.props
             );
             this.fs.copy(
-                this.templatePath('danf-client.js'),
-                this.destinationPath('danf-client.js')
+                this.templatePath('danf.js'),
+                this.destinationPath('danf.js')
             );
             this.fs.copy(
-                this.templatePath('danf-server.js'),
-                this.destinationPath('danf-server.js')
+                this.templatePath('gulpfile.js'),
+                this.destinationPath('gulpfile.js')
             );
         }
     },
@@ -226,13 +233,15 @@ module.exports = yeoman.generators.Base.extend({
 
         this.log(chalk.yellow(
             'The name of your danf application/module is ' +
-            chalk.bold(this.props['repository']['name']) +
-            '. You should certainly name your repository the same.'
+            chalk.bold(this.props.module.name) +
+            '. The recommended name for your repository is ' +
+            chalk.bold(this.props.repository.name) +
+            '.'
         ));
 
         this.log(
             'Execute ' +
-            chalk.bold('node app-prod') +
+            chalk.bold('node danf serve') +
             ' to start the server.'
         );
         this.log(

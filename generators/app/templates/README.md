@@ -6,34 +6,24 @@
 Use as a danf module
 --------------------
 
-Add the module to your `package.json`:
-```json
-{
-    ...
-    "dependencies": {
-        ...,
-        "<%= repository.name %>": "*"
-    },
-    ...
-}
-```
-
-Then, install this new dependency:
+Install as a new dependency and save it in the list of your dependencies of your `package.json`:
 ```sh
-$ npm install
+$ npm install <%= repository.name %> --save
 ```
 
 Use as an application
 ---------------------
 
-Start the server with the command:
+Start the server and build the client files with the command:
 ```sh
-$ node app-dev
+$ node danf serve
 ```
 
-You should be able to test the application at `http://localhost:3080`.
+You should have a welcome message at `http://localhost:3080`.
 
-> Use `app-prod` to start the server in prod environment.
+> Use `node danf serve --env prod` to start the server in prod environment.
+
+> You do not have to restart the server manually each time you modify a file: a daemon is watching at the modifications and restarts the server or rebuilds the specific client files if needed.
 
 Execute tests
 -------------
