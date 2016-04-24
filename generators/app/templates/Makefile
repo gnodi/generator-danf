@@ -1,4 +1,4 @@
-MOCHA_OPTS = --check-leaks --delay
+MOCHA_OPTS = --check-leaks --delay --globals async
 REPORTER = dot
 
 check: test
